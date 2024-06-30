@@ -1,0 +1,56 @@
+-- Step 1: Create the table
+CREATE TABLE HOSPITAL (
+    PatientID CHAR(10) PRIMARY KEY,
+    Name CHAR(20) NOT NULL,
+    Age NUMERIC(3) NOT NULL,
+    Doctor CHAR(20) NOT NULL,
+    PatientType CHAR(15) NOT NULL CHECK (PatientType IN ('in-patient', 'out-patient')),
+    ConsultCharge NUMERIC(6) NOT NULL,
+    BloodTestCharge NUMERIC(6),
+    XrayCharge NUMERIC(6),
+    OtherCharges NUMERIC(6),
+    TotalAmount NUMERIC(6)
+);
+
+-- Step 2: Insert records
+INSERT INTO HOSPITAL (PatientID, Name, Age, Doctor, PatientType, ConsultCharge, BloodTestCharge, XrayCharge, OtherCharges, TotalAmount)
+VALUES
+('P001', 'Alice Smith', 30, 'Dr. John', 'in-patient', 200, 50, 100, 150, 500),
+('P002', 'Bob Brown', 45, 'Dr. Jane', 'out-patient', 150, 40, 80, 120, 390),
+('P003', 'Charlie Davis', 25, 'Dr. John', 'in-patient', 250, 60, 90, 110, 510),
+('P004', 'David Evans', 50, 'Dr. Smith', 'out-patient', 180, 30, 70, 140, 420),
+('P005', 'Eve Foster', 35, 'Dr. Jane', 'in-patient', 220, 70, 60, 130, 480),
+('P006', 'Frank Green', 40, 'Dr. John', 'out-patient', 160, 20, 50, 100, 330),
+('P007', 'Grace Harris', 55, 'Dr. Smith', 'in-patient', 240, 80, 100, 160, 580),
+('P008', 'Hank Irving', 60, 'Dr. Jane', 'out-patient', 190, 50, 60, 110, 410),
+('P009', 'Ivy Johnson', 20, 'Dr. John', 'in-patient', 230, 90, 70, 120, 510),
+('P010', 'Jack King', 65, 'Dr. Smith', 'out-patient', 170, 40, 80, 130, 420);
+
+-- Step 3: Generate reports
+
+-- In-patient report
+SELECT *
+FROM HOSPITAL
+WHERE PatientType = 'in-patient'
+ORDER BY Name ASC;
+
+-- Out-patient report
+SELECT *
+FROM HOSPITAL
+WHERE PatientType = 'out-patient'
+ORDER BY Name ASC;
+
+                                                 or
+
+
+SQL> INSERT INTO HOSPITAL VALUES('P001', 'Alice Smith', 30, 'Dr. John', 'in-patient', 200, 50, 100, 150, 500);
+
+1 row created.
+
+SQL>  INSERT INTO HOSPITAL VALUES ('P002', 'Bob Brown', 45, 'Dr. Jane', 'out-patient', 150, 40, 80, 120, 390);
+
+1 row created.
+
+SQL>
+
+

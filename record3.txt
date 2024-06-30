@@ -1,0 +1,126 @@
+create table cstmr(cstmrid char(10),name char(25),area char(25),phn numeric(10));
+
+Table created.
+
+SQL> insert into cstmr values(001,'alice','abc',155123);
+
+1 row created.
+
+SQL>  insert into cstmr values(002,'ben','def',2345678);
+
+1 row created.
+
+SQL>  insert into cstmr values(003,'cathy','ghi',345678);
+
+1 row created.
+
+SQL> insert into cstmr values(004,'david','abc',4567890);
+
+1 row created.
+
+SQL>  insert into cstmr values(005,'eve',null,567890);
+
+1 row created.
+
+
+
+SQL> select * from cstmr;
+
+CSTMRID    NAME                      AREA                             PHN
+---------- ------------------------- ------------------------- ----------
+1          alice                     abc                           155123
+2          ben                       def                          2345678
+3          cathy                     ghi                           345678
+4          david                     abc                          4567890
+5          eve                                                     567890
+
+SQL> update cstmr set phn=91 + phn;
+
+5 rows updated.
+
+SQL> select * from cstmr;
+
+CSTMRID    NAME                      AREA                             PHN
+---------- ------------------------- ------------------------- ----------
+1          alice                     abc                           155214
+2          ben                       def                          2345769
+3          cathy                     ghi                           345769
+4          david                     abc                          4567981
+5          eve                                                     567981
+
+SQL>  update cstmr set phn=910000000 + phn;
+
+5 rows updated.
+
+SQL> select * from cstmr;
+
+CSTMRID    NAME                      AREA                             PHN
+---------- ------------------------- ------------------------- ----------
+1          alice                     abc                        910155214
+2          ben                       def                        912345769
+3          cathy                     ghi                        910345769
+4          david                     abc                        914567981
+5          eve                                                  910567981
+
+
+
+SQL> select name from cstmr where name like '_e%';
+
+NAME
+-------------------------
+ben
+
+SQL> select * from cstmr where area = 'abc';
+
+CSTMRID    NAME                      AREA                             PHN
+---------- ------------------------- ------------------------- ----------
+1          alice                     abc                        910155214
+4          david                     abc                        914567981
+
+SQL> delete from cstmr where area is null;
+
+1 row deleted.
+
+
+
+SQL> select * from cstmr order by name asc;
+
+CSTMRID    NAME                      AREA                             PHN
+---------- ------------------------- ------------------------- ----------
+1          alice                     abc                        910155214
+2          ben                       def                        912345769
+3          cathy                     ghi                        910345769
+4          david                     abc                        914567981
+
+SQL> create table temp as select cstmrid, name, area from cstmr;
+
+Table created.
+
+SQL> select area, count(*) as numberofrecords from cstmr group by area;
+
+AREA                      NUMBEROFRECORDS
+------------------------- ---------------
+abc                                     2
+def                                     1
+ghi                                     1
+
+SQL> select * from cstmr where name like 'a%' or area = 'abc';
+
+CSTMRID    NAME                      AREA                             PHN
+---------- ------------------------- ------------------------- ----------
+1          alice                     abc                        910155214
+4          david                     abc                        914567981
+
+
+
+
+SQL> select * from cstmr where name like 'a%' and phn between 910155214 and 914567981;
+
+CSTMRID    NAME                      AREA                             PHN
+---------- ------------------------- ------------------------- ----------
+1          alice                     abc                        910155214
+
+SQL>
+
+
+

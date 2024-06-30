@@ -1,0 +1,95 @@
+CREATE TABLE shop (
+    Item_ID SERIAL PRIMARY KEY,
+    Item_Name VARCHAR(255) NOT NULL,
+    Price DECIMAL(10, 2) NOT NULL,
+    Quantity INT NOT NULL
+);
+
+
+
+CREATE OR REPLACE PROCEDURE sales(p_Item_ID INT, p_Quantity INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE shop
+    SET Quantity = Quantity - p_Quantity
+    WHERE Item_ID = p_Item_ID;
+
+    -- Check if update was successful
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Item_ID % not found', p_Item_ID;
+    END IF;
+
+    -- Check if quantity goes negative
+    IF (SELECT Quantity FROM shop WHERE Item_ID = p_Item_ID) < 0 THEN
+        ROLLBACK;
+        RAISE EXCEPTION 'Not enough stock for Item_ID %', p_Item_ID;
+    END IF;
+END;
+$$;
+
+
+CALL sales(1, 5);
+
+
+                                    expanatioun
+
+
+Creating the Table:
+
+Item_ID: A unique identifier for each item, auto-incremented (SERIAL).
+Item_Name: The name of the item, must not be null.
+Price: The price of the item, with two decimal places, must not be null.
+Quantity: The available quantity of the item, must not be null.
+Creating the Procedure:
+
+The procedure sales takes two parameters: p_Item_ID (the ID of the item) and p_Quantity (the quantity to be deducted from the available stock).
+The UPDATE statement reduces the quantity by the specified amount.
+The IF NOT FOUND block raises an exception if the Item_ID is not found.
+The IF block checks if the updated quantity goes negative, in which case it rolls back the transaction and raises an exception.
+Invoking the Procedure:
+
+The CALL statement invokes the sales procedure with specific values for Item_ID and Quantity. For example, CALL sales(1, 5); tries to deduct 5 units from the item with Item_ID 1.
+This setup ensures that the procedure correctly updates the quantity and handles potential errors such as invalid Item_IDs and insufficient stock.
+
+                                                               or
+
+-- Step 1: Create the table
+CREATE TABLE shop (
+    Item_ID SERIAL PRIMARY KEY,
+    Item_Name VARCHAR(255) NOT NULL,
+    Price NUMERIC(10, 2) NOT NULL,
+    Quantity INT NOT NULL
+);
+
+-- Step 2: Create the procedure
+CREATE OR REPLACE PROCEDURE sales(p_Item_ID INT, p_Quantity INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE shop
+    SET Quantity = Quantity - p_Quantity
+    WHERE Item_ID = p_Item_ID;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Item_ID % not found', p_Item_ID;
+    END IF;
+
+    IF (SELECT Quantity FROM shop WHERE Item_ID = p_Item_ID) < 0 THEN
+        RAISE EXCEPTION 'Insufficient quantity for Item_ID %', p_Item_ID;
+    END IF;
+END;
+$$;
+
+-- Step 3: Invoke the procedure
+DO $$
+BEGIN
+    PERFORM sales(1, 10);  -- Example: Reducing the quantity of item with Item_ID 1 by 10
+END $$;
+
+
+
+
+
+
+

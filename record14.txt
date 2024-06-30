@@ -1,0 +1,172 @@
+-- Create STUDENT table
+CREATE TABLE STUDENT (
+    RegNo CHARACTER(10) PRIMARY KEY,
+    Name CHARACTER(20),
+    Paper1 NUMERIC(3),
+    Paper2 NUMERIC(3),
+    Paper3 NUMERIC(3),
+    Paper4 NUMERIC(3),
+    Paper5 NUMERIC(3),
+    Total NUMERIC(3),
+    Result CHARACTER(6),
+    Grade CHARACTER(1)
+);
+
+-- Insert sample records into STUDENT table
+INSERT INTO STUDENT (RegNo, Name, Paper1, Paper2, Paper3, Paper4, Paper5)
+VALUES
+('S001', 'John Doe', 75, 80, 70, 85, 90),
+('S002', 'Jane Smith', 65, 70, 75, 60, 80),
+('S003', 'Michael Johnson', 85, 90, 80, 88, 92),
+('S004', 'Emily Brown', 55, 60, 50, 65, 58),
+('S005', 'Robert Williams', 70, 75, 72, 68, 78),
+('S006', 'Jennifer Davis', 82, 78, 85, 80, 88),
+('S007', 'William Miller', 45, 50, 55, 40, 48),
+('S008', 'Emma Wilson', 92, 85, 88, 90, 95),
+('S009', 'David Martinez', 68, 72, 70, 65, 75),
+('S010', 'Olivia Garcia', 60, 65, 62, 58, 70);
+
+-- Update STUDENT table with Total, Result, and Grade
+UPDATE STUDENT
+SET Total = Paper1 + Paper2 + Paper3 + Paper4 + Paper5,
+    Result = CASE
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.5 THEN 'Passed'
+                ELSE 'Failed'
+            END,
+    Grade = CASE
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.9 THEN 'A'
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.75 THEN 'B'
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.6 THEN 'C'
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.5 THEN 'D'
+                ELSE 'F'
+            END;
+
+-- Display report in descending order of Total mark
+SELECT RegNo, Name, Paper1, Paper2, Paper3, Paper4, Paper5, Total, Result, Grade
+FROM STUDENT
+ORDER BY Total DESC;
+
+
+                                                      uor
+
+
+Step 1: Create the STUDENT Table
+sql
+Copy code
+-- Create STUDENT table
+CREATE TABLE STUDENT (
+    RegNo CHARACTER(10) PRIMARY KEY,
+    Name CHARACTER(20),
+    Paper1 NUMERIC(3),
+    Paper2 NUMERIC(3),
+    Paper3 NUMERIC(3),
+    Paper4 NUMERIC(3),
+    Paper5 NUMERIC(3),
+    Total NUMERIC(3),
+    Result CHARACTER(6),
+    Grade CHARACTER(1)
+);
+Step 2: Insert Sample Data
+Let's insert sample data for at least 10 students, including their registration number, name, and marks in 5 papers.
+
+sql
+Copy code
+-- Insert sample records into STUDENT table
+INSERT INTO STUDENT (RegNo, Name, Paper1, Paper2, Paper3, Paper4, Paper5)
+VALUES
+('S001', 'John Doe', 75, 80, 70, 85, 90),
+('S002', 'Jane Smith', 65, 70, 75, 60, 80),
+('S003', 'Michael Johnson', 85, 90, 80, 88, 92),
+('S004', 'Emily Brown', 55, 60, 50, 65, 58),
+('S005', 'Robert Williams', 70, 75, 72, 68, 78),
+('S006', 'Jennifer Davis', 82, 78, 85, 80, 88),
+('S007', 'William Miller', 45, 50, 55, 40, 48),
+('S008', 'Emma Wilson', 92, 85, 88, 90, 95),
+('S009', 'David Martinez', 68, 72, 70, 65, 75),
+('S010', 'Olivia Garcia', 60, 65, 62, 58, 70);
+Step 3: Update the Table with Total, Result, and Grade
+Now, we'll write a SQL program to update the STUDENT table with values for Total, Result, and Grade based on the specified conditions.
+
+sql
+Copy code
+-- Update STUDENT table with Total, Result, and Grade
+UPDATE STUDENT
+SET Total = Paper1 + Paper2 + Paper3 + Paper4 + Paper5,
+    Result = CASE
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.5 THEN 'Passed'
+                ELSE 'Failed'
+            END,
+    Grade = CASE
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.9 THEN 'A'
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.75 THEN 'B'
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.6 THEN 'C'
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.5 THEN 'D'
+                ELSE 'F'
+            END;
+Step 4: Display the Report
+Finally, we'll display a report in descending order of the total mark, showing the data entered into the table along with the total marks, result, and grade.
+
+sql
+Copy code
+-- Display report in descending order of Total mark
+SELECT RegNo, Name, Paper1, Paper2, Paper3, Paper4, Paper5, Total, Result, Grade
+FROM STUDENT
+ORDER BY Total DESC;
+Complete SQL Script
+Here is the complete SQL script that includes table creation, data insertion, updates for Total, Result, and Grade, and the report display:
+
+sql
+Copy code
+-- Create STUDENT table
+CREATE TABLE STUDENT (
+    RegNo CHARACTER(10) PRIMARY KEY,
+    Name CHARACTER(20),
+    Paper1 NUMERIC(3),
+    Paper2 NUMERIC(3),
+    Paper3 NUMERIC(3),
+    Paper4 NUMERIC(3),
+    Paper5 NUMERIC(3),
+    Total NUMERIC(3),
+    Result CHARACTER(6),
+    Grade CHARACTER(1)
+);
+
+-- Insert sample records into STUDENT table
+INSERT INTO STUDENT (RegNo, Name, Paper1, Paper2, Paper3, Paper4, Paper5)
+VALUES
+('S001', 'John Doe', 75, 80, 70, 85, 90),
+('S002', 'Jane Smith', 65, 70, 75, 60, 80),
+('S003', 'Michael Johnson', 85, 90, 80, 88, 92),
+('S004', 'Emily Brown', 55, 60, 50, 65, 58),
+('S005', 'Robert Williams', 70, 75, 72, 68, 78),
+('S006', 'Jennifer Davis', 82, 78, 85, 80, 88),
+('S007', 'William Miller', 45, 50, 55, 40, 48),
+('S008', 'Emma Wilson', 92, 85, 88, 90, 95),
+('S009', 'David Martinez', 68, 72, 70, 65, 75),
+('S010', 'Olivia Garcia', 60, 65, 62, 58, 70);
+
+-- Update STUDENT table with Total, Result, and Grade
+UPDATE STUDENT
+SET Total = Paper1 + Paper2 + Paper3 + Paper4 + Paper5,
+    Result = CASE
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.5 THEN 'Passed'
+                ELSE 'Failed'
+            END,
+    Grade = CASE
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.9 THEN 'A'
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.75 THEN 'B'
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.6 THEN 'C'
+                WHEN (Paper1 + Paper2 + Paper3 + Paper4 + Paper5) >= 250 * 0.5 THEN 'D'
+                ELSE 'F'
+            END;
+
+-- Display report in descending order of Total mark
+SELECT RegNo, Name, Paper1, Paper2, Paper3, Paper4, Paper5, Total, Result, Grade
+FROM STUDENT
+ORDER BY Total DESC;
+This script sets up the STUDENT table, inserts sample data, computes Total, Result, and Grade based on the specified rules, and finally displays a report sorted in descending order of the total marks. Adjust the calculations and logic as per your specific requirements or actual grading policies.
+
+
+
+
+

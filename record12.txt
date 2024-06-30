@@ -1,0 +1,64 @@
+-- Create SALARIES table
+CREATE TABLE SALARIES (
+    EmpNo CHARACTER(10) PRIMARY KEY,
+    Name CHARACTER(20),
+    Basic NUMERIC(8, 2)
+);
+
+-- Insert sample records for employees
+INSERT INTO SALARIES (EmpNo, Name, Basic)
+VALUES
+('E001', 'John Doe', 25000),
+('E002', 'Jane Smith', 30000),
+('E003', 'Michael Johnson', 35000),
+('E004', 'Emily Brown', 28000),
+('E005', 'Robert Williams', 40000),
+('E006', 'Jennifer Davis', 32000),
+('E007', 'William Miller', 27000),
+('E008', 'Emma Wilson', 38000),
+('E009', 'David Martinez', 33000),
+('E010', 'Olivia Garcia', 29000);
+
+-- Update table to add computed columns
+ALTER TABLE SALARIES
+ADD COLUMN DA NUMERIC(8, 2),
+ADD COLUMN GrossSalary NUMERIC(8, 2),
+ADD COLUMN PF NUMERIC(8, 2),
+ADD COLUMN NetSalary NUMERIC(8, 2),
+ADD COLUMN AnnualSalary NUMERIC(10, 2),
+ADD COLUMN Tax NUMERIC(8, 2);
+
+-- Calculate DA (40% of Basic Pay), Gross Salary, PF (10% of Basic Pay), Net Salary, Annual Salary, and Tax
+UPDATE SALARIES
+SET DA = Basic * 0.4,
+    GrossSalary = Basic + (Basic * 0.4),
+    PF = Basic * 0.1,
+    NetSalary = Basic + (Basic * 0.4) - (Basic * 0.1),
+    AnnualSalary = (Basic + (Basic * 0.4) - (Basic * 0.1)) * 12,
+    Tax = CASE
+            WHEN (Basic + (Basic * 0.4) - (Basic * 0.1)) * 12 <= 100000 THEN 0
+            WHEN (Basic + (Basic * 0.4) - (Basic * 0.1)) * 12 > 100000 AND (Basic + (Basic * 0.4) - (Basic * 0.1)) * 12 <= 150000 THEN ((Basic + (Basic * 0.4) - (Basic * 0.1)) * 12 - 100000) * 0.1
+            WHEN (Basic + (Basic * 0.4) - (Basic * 0.1)) * 12 > 150000 AND (Basic + (Basic * 0.4) - (Basic * 0.1)) * 12 <= 250000 THEN 5000 + ((Basic + (Basic * 0.4) - (Basic * 0.1)) * 12 - 150000) * 0.2
+            ELSE 25000 + ((Basic + (Basic * 0.4) - (Basic * 0.1)) * 12 - 250000) * 0.3
+        END;
+
+-- Display the salary report
+SELECT EmpNo, Name, Basic, DA, GrossSalary, PF, NetSalary, AnnualSalary, Tax
+FROM SALARIES;
+
+
+                                                               uor
+
+Explanation:
+DA: Calculated as 40% of the Basic pay.
+Gross Salary: Sum of Basic pay and DA.
+PF: Calculated as 10% of the Basic pay.
+Net Salary: Gross salary minus PF.
+Annual Salary: Net salary multiplied by 12.
+Tax: Calculated based on the annual salary using conditional logic (CASE statement) as per the provided tax rules.
+Adjust the SQL queries as per your specific database system's syntax if needed (e.g., for different databases, the syntax for creating tables or adding columns might vary slightly). This script calculates and displays a comprehensive salary report for each employee based on the provided rules.
+
+
+
+
+

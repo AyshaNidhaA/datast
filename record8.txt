@@ -1,0 +1,110 @@
+-- Step 1: Create the tables
+CREATE TABLE Authors (
+    AuthorID SERIAL PRIMARY KEY,
+    AuthorName VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Books (
+    BookID SERIAL PRIMARY KEY,
+    Title VARCHAR(255) NOT NULL,
+    Genre VARCHAR(100),
+    PublishedYear INT,
+    Available BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE BookAuthors (
+    BookID INT REFERENCES Books(BookID) ON DELETE CASCADE,
+    AuthorID INT REFERENCES Authors(AuthorID) ON DELETE CASCADE,
+    PRIMARY KEY (BookID, AuthorID)
+);
+
+CREATE TABLE Members (
+    MemberID SERIAL PRIMARY KEY,
+    MemberName VARCHAR(255) NOT NULL,
+    MembershipDate DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+CREATE TABLE Loans (
+    LoanID SERIAL PRIMARY KEY,
+    BookID INT REFERENCES Books(BookID) ON DELETE CASCADE,
+    MemberID INT REFERENCES Members(MemberID) ON DELETE CASCADE,
+    LoanDate DATE NOT NULL DEFAULT CURRENT_DATE,
+    ReturnDate DATE
+);
+
+-- Step 2: Insert records
+
+-- Authors
+INSERT INTO Authors (AuthorName)
+VALUES
+('Harper Lee'),
+('George Orwell'),
+('Herman Melville'),
+('F. Scott Fitzgerald'),
+('Leo Tolstoy'),
+('Jane Austen'),
+('J.D. Salinger'),
+('J.R.R. Tolkien');
+
+-- Books
+INSERT INTO Books (Title, Genre, PublishedYear, Available)
+VALUES
+('To Kill a Mockingbird', 'Fiction', 1960, TRUE),
+('1984', 'Dystopian', 1949, TRUE),
+('Moby Dick', 'Adventure', 1851, FALSE),
+('The Great Gatsby', 'Tragedy', 1925, TRUE),
+('War and Peace', 'Historical', 1869, TRUE),
+('Pride and Prejudice', 'Romance', 1813, TRUE),
+('The Catcher in the Rye', 'Fiction', 1951, FALSE),
+('The Lord of the Rings', 'Fantasy', 1954, TRUE),
+('Animal Farm', 'Political Satire', 1945, TRUE),
+('The Hobbit', 'Fantasy', 1937, TRUE);
+
+-- Book-Author relationships
+INSERT INTO BookAuthors (BookID, AuthorID)
+VALUES
+(1, 1),  -- To Kill a Mockingbird by Harper Lee
+(2, 2),  -- 1984 by George Orwell
+(3, 3),  -- Moby Dick by Herman Melville
+(4, 4),  -- The Great Gatsby by F. Scott Fitzgerald
+(5, 5),  -- War and Peace by Leo Tolstoy
+(6, 6),  -- Pride and Prejudice by Jane Austen
+(7, 7),  -- The Catcher in the Rye by J.D. Salinger
+(8, 8),  -- The Lord of the Rings by J.R.R. Tolkien
+(9, 2),  -- Animal Farm by George Orwell
+(10, 8); -- The Hobbit by J.R.R. Tolkien
+
+-- Members
+INSERT INTO Members (MemberName)
+VALUES
+('Alice Johnson'),
+('Bob Smith'),
+('Charlie Brown'),
+('David White'),
+('Eve Black');
+
+-- Loans
+INSERT INTO Loans (BookID, MemberID, LoanDate, ReturnDate)
+VALUES
+(3, 1, '2024-01-15', NULL),  -- Moby Dick loaned to Alice Johnson
+(7, 2, '2024-02-01', NULL),  -- The Catcher in the Rye loaned to Bob Smith
+(10, 3, '2024-03-05', '2024-03-20'),  -- The Hobbit loaned to Charlie Brown and returned
+(5, 4, '2024-04-10', NULL);  -- War and Peace loaned to David White
+
+-- Step 3: Generate reports
+
+-- Report of available books
+SELECT *
+FROM Books
+WHERE Available = TRUE
+ORDER BY Title ASC;
+
+-- Report of books and their authors
+SELECT b.Title, a.AuthorName
+FROM Books b
+JOIN BookAuthors ba ON b.BookID = ba.BookID
+JOIN Authors a ON ba.AuthorID = a.AuthorID
+ORDER BY b.Title ASC;
+
+-- Report of books loaned out
+SELECT b.Title

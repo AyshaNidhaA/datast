@@ -1,0 +1,31 @@
+-- Step 1: Create the table
+CREATE TABLE LIBRARY (
+    BookID SERIAL PRIMARY KEY,
+    Title VARCHAR(255) NOT NULL,
+    Author VARCHAR(255) NOT NULL,
+    Genre VARCHAR(100),
+    PublishedYear INT,
+    Available BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+-- Step 2: Insert records
+INSERT INTO LIBRARY (Title, Author, Genre, PublishedYear, Available)
+VALUES
+('To Kill a Mockingbird', 'Harper Lee', 'Fiction', 1960, TRUE),
+('1984', 'George Orwell', 'Dystopian', 1949, TRUE),
+('Moby Dick', 'Herman Melville', 'Adventure', 1851, FALSE),
+('The Great Gatsby', 'F. Scott Fitzgerald', 'Tragedy', 1925, TRUE),
+('War and Peace', 'Leo Tolstoy', 'Historical', 1869, TRUE),
+('Pride and Prejudice', 'Jane Austen', 'Romance', 1813, TRUE),
+('The Catcher in the Rye', 'J.D. Salinger', 'Fiction', 1951, FALSE),
+('The Lord of the Rings', 'J.R.R. Tolkien', 'Fantasy', 1954, TRUE),
+('Animal Farm', 'George Orwell', 'Political Satire', 1945, TRUE),
+('The Hobbit', 'J.R.R. Tolkien', 'Fantasy', 1937, TRUE);
+
+-- Step 3: Generate report
+
+-- Report of available books
+SELECT *
+FROM LIBRARY
+WHERE Available = TRUE
+ORDER BY Title ASC;

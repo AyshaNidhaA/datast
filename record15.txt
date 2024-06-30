@@ -1,0 +1,244 @@
+-- Create Department table
+CREATE TABLE Department (
+    dept_number INT PRIMARY KEY,
+    dept_name VARCHAR(50) NOT NULL
+);
+
+-- Create Employee table
+CREATE TABLE Employee (
+    emp_number VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    dept_number INT,
+    salary NUMERIC(10, 2),
+    FOREIGN KEY (dept_number) REFERENCES Department(dept_number)
+);
+
+-- Insert records into Department table
+INSERT INTO Department (dept_number, dept_name)
+VALUES
+(101, 'HR'),
+(102, 'Finance'),
+(103, 'IT');
+
+-- Insert records into Employee table with integrity checks
+INSERT INTO Employee (emp_number, name, dept_number, salary)
+VALUES
+('E001', 'John Doe', 101, 50000),
+('E002', 'Jane Smith', 102, 60000),
+('E003', 'Michael Johnson', 103, 55000),
+('E004', 'Emily Brown', 101, 48000);
+
+-- Add record in Employee table where department value is not present in Department table
+INSERT INTO Employee (emp_number, name, dept_number, salary)
+VALUES
+('E005', 'Robert Williams', 104, 52000);  -- Department number 104 does not exist in Department table
+
+-- Query to display records from Employee table where department is not found in Department table
+SELECT *
+FROM Employee
+WHERE dept_number NOT IN (SELECT dept_number FROM Department);
+
+-- Query to display records from Employee table with proper headings and unmatched departments
+SELECT 
+    e.emp_number AS "Employee Number",
+    e.name AS "Employee Name",
+    e.salary AS "Salary",
+    e.dept_number AS "Department Number",
+    d.dept_name AS "Department Name"
+FROM Employee e
+LEFT JOIN Department d ON e.dept_number = d.dept_number
+ORDER BY e.emp_number;
+
+-- Query to display employee records with salary less than the salary of a specific employee (e.g., 'E001')
+SELECT *
+FROM Employee
+WHERE salary < (SELECT salary FROM Employee WHERE emp_number = 'E001');
+
+-- Create SalesData table
+CREATE TABLE SalesData (
+    RegionCode VARCHAR(10),
+    City VARCHAR(100),
+    SalespersonCode VARCHAR(10),
+    SalesQty INT
+);
+
+-- Query to display records where salesperson has achieved sales more than average sales of all salespersons
+SELECT *
+FROM SalesData sd
+WHERE SalesQty > (SELECT AVG(SalesQty) FROM SalesData);
+
+                                                                   uor
+
+
+
+
+Step 1: Create Tables
+First, we'll create the Employee and Department tables as per your requirements:
+
+sql
+Copy code
+-- Create Department table
+CREATE TABLE Department (
+    dept_number INT PRIMARY KEY,
+    dept_name VARCHAR(50) NOT NULL
+);
+
+-- Create Employee table
+CREATE TABLE Employee (
+    emp_number VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    dept_number INT,
+    salary NUMERIC(10, 2),
+    FOREIGN KEY (dept_number) REFERENCES Department(dept_number)
+);
+Step 2: Insert Records with Integrity Checks
+Insert some records into the Department and Employee tables, ensuring integrity checks:
+
+sql
+Copy code
+-- Insert records into Department table
+INSERT INTO Department (dept_number, dept_name)
+VALUES
+(101, 'HR'),
+(102, 'Finance'),
+(103, 'IT');
+
+-- Insert records into Employee table with integrity checks
+INSERT INTO Employee (emp_number, name, dept_number, salary)
+VALUES
+('E001', 'John Doe', 101, 50000),
+('E002', 'Jane Smith', 102, 60000),
+('E003', 'Michael Johnson', 103, 55000),
+('E004', 'Emily Brown', 101, 48000);
+Step 3: Add Records with Department not in Department Table
+Add a record in the Employee table where the department value does not exist in the Department table:
+
+sql
+Copy code
+-- Add record in Employee table where department value is not present in Department table
+INSERT INTO Employee (emp_number, name, dept_number, salary)
+VALUES
+('E005', 'Robert Williams', 104, 52000);  -- Department number 104 does not exist in Department table
+Step 4: Queries
+a. Display all records from Employee table where department is not found in Department table.
+sql
+Copy code
+-- Query to display records from Employee table where department is not found in Department table
+SELECT *
+FROM Employee
+WHERE dept_number NOT IN (SELECT dept_number FROM Department);
+b. Display records from Employee table in a report format with proper headings, including unmatched departments.
+sql
+Copy code
+-- Query to display records from Employee table with proper headings and unmatched departments
+SELECT 
+    e.emp_number AS "Employee Number",
+    e.name AS "Employee Name",
+    e.salary AS "Salary",
+    e.dept_number AS "Department Number",
+    d.dept_name AS "Department Name"
+FROM Employee e
+LEFT JOIN Department d ON e.dept_number = d.dept_number
+ORDER BY e.emp_number;
+c. Display employee records who have salary less than the salary of person whose emp_number = 'A100'.
+Assuming 'A100' does not exist in our current data, let's choose another employee for comparison:
+
+sql
+Copy code
+-- Query to display employee records with salary less than the salary of a specific employee (e.g., 'E001')
+SELECT *
+FROM Employee
+WHERE salary < (SELECT salary FROM Employee WHERE emp_number = 'E001');
+Step 5: Create SalesData Table
+sql
+Copy code
+-- Create SalesData table
+CREATE TABLE SalesData (
+    RegionCode VARCHAR(10),
+    City VARCHAR(100),
+    SalespersonCode VARCHAR(10),
+    SalesQty INT
+);
+Step 6: Display Records where Salesperson has Achieved Sales more than Average
+sql
+Copy code
+-- Query to display records where salesperson has achieved sales more than average sales of all salespersons
+SELECT *
+FROM SalesData sd
+WHERE SalesQty > (SELECT AVG(SalesQty) FROM SalesData);
+Complete SQL Script
+Here's the complete SQL script that includes table creation, data insertion, and query execution:
+
+sql
+Copy code
+-- Create Department table
+CREATE TABLE Department (
+    dept_number INT PRIMARY KEY,
+    dept_name VARCHAR(50) NOT NULL
+);
+
+-- Create Employee table
+CREATE TABLE Employee (
+    emp_number VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    dept_number INT,
+    salary NUMERIC(10, 2),
+    FOREIGN KEY (dept_number) REFERENCES Department(dept_number)
+);
+
+-- Insert records into Department table
+INSERT INTO Department (dept_number, dept_name)
+VALUES
+(101, 'HR'),
+(102, 'Finance'),
+(103, 'IT');
+
+-- Insert records into Employee table with integrity checks
+INSERT INTO Employee (emp_number, name, dept_number, salary)
+VALUES
+('E001', 'John Doe', 101, 50000),
+('E002', 'Jane Smith', 102, 60000),
+('E003', 'Michael Johnson', 103, 55000),
+('E004', 'Emily Brown', 101, 48000);
+
+-- Add record in Employee table where department value is not present in Department table
+INSERT INTO Employee (emp_number, name, dept_number, salary)
+VALUES
+('E005', 'Robert Williams', 104, 52000);  -- Department number 104 does not exist in Department table
+
+-- Query to display records from Employee table where department is not found in Department table
+SELECT *
+FROM Employee
+WHERE dept_number NOT IN (SELECT dept_number FROM Department);
+
+-- Query to display records from Employee table with proper headings and unmatched departments
+SELECT 
+    e.emp_number AS "Employee Number",
+    e.name AS "Employee Name",
+    e.salary AS "Salary",
+    e.dept_number AS "Department Number",
+    d.dept_name AS "Department Name"
+FROM Employee e
+LEFT JOIN Department d ON e.dept_number = d.dept_number
+ORDER BY e.emp_number;
+
+-- Query to display employee records with salary less than the salary of a specific employee (e.g., 'E001')
+SELECT *
+FROM Employee
+WHERE salary < (SELECT salary FROM Employee WHERE emp_number = 'E001');
+
+-- Create SalesData table
+CREATE TABLE SalesData (
+    RegionCode VARCHAR(10),
+    City VARCHAR(100),
+    SalespersonCode VARCHAR(10),
+    SalesQty INT
+);
+
+-- Query to display records where salesperson has achieved sales more than average sales of all salespersons
+SELECT *
+FROM SalesData sd
+WHERE SalesQty > (SELECT AVG(SalesQty) FROM SalesData);
+This script sets up the tables (Employee, Department, SalesData), inserts sample data, and performs the queries as specified. Adjust the queries and data according to your specific requirements and actual data scenarios.
+
+

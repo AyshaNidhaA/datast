@@ -1,0 +1,131 @@
+Step 1: Create the Elec_Bill Table
+sql
+Copy code
+-- Create Elec_Bill table
+CREATE TABLE Elec_Bill (
+    Cust_No CHARACTER(10) PRIMARY KEY,
+    Cust_Name VARCHAR(100),
+    Units_Consumed INTEGER,
+    Bill_Amt NUMERIC(10, 2) -- Default to NULL
+);
+Step 2: Create the PostgreSQL Function to Calculate Bill_Amt
+Next, we'll create a PostgreSQL function that calculates the Bill_Amt based on Units_Consumed and updates it in the Elec_Bill table.
+
+sql
+Copy code
+-- Create function to calculate Bill_Amt
+CREATE OR REPLACE FUNCTION calculate_bill_amt(cust_no CHARACTER(10), units_consumed INTEGER)
+RETURNS VOID AS $$
+DECLARE
+    da NUMERIC(10, 2);
+    pf NUMERIC(10, 2);
+    gross_salary NUMERIC(10, 2);
+    net_salary NUMERIC(10, 2);
+BEGIN
+    -- Calculate DA (assuming 40% of the base charge, which we will use for simplicity)
+    da := units_consumed * 10.5; -- Assuming DA is calculated as 10.5 per unit consumed
+    
+    -- Calculate PF (assuming 5% of the base charge, which we will use for simplicity)
+    pf := units_consumed * 2.5; -- Assuming PF is calculated as 2.5 per unit consumed
+    
+    -- Calculate Gross Salary
+    gross_salary := units_consumed * 20; -- Assuming a fixed rate of 20 per unit consumed
+    
+    -- Calculate Net Salary
+    net_salary := gross_salary - pf; -- Subtract PF from Gross Salary
+    
+    -- Update Bill_Amt in Elec_Bill table
+    UPDATE Elec_Bill
+    SET Bill_Amt = net_salary
+    WHERE Cust_No = cust_no;
+    
+    -- Optionally, you can return something if needed
+    -- RETURN 'Bill amount updated successfully';
+END;
+$$ LANGUAGE plpgsql;
+Step 3: Write a PostgreSQL Block to Invoke the Function
+Now, let's write a PostgreSQL block to invoke the calculate_bill_amt function for a specific Cust_No and Units_Consumed.
+
+sql
+Copy code
+-- PostgreSQL block to update Bill_Amt by invoking the function
+DO $$
+DECLARE
+    cust_no CHARACTER(10) := 'C001'; -- Replace with the actual Cust_No
+    units_consumed INTEGER := 100; -- Replace with the actual Units_Consumed
+BEGIN
+    PERFORM calculate_bill_amt(cust_no, units_consumed);
+    -- Optionally, you can add additional operations or logic here
+    
+    -- Print a message indicating success
+    RAISE NOTICE 'Bill amount updated successfully for Cust_No: %', cust_no;
+END;
+$$;
+Explanation:
+Step 1: We create the Elec_Bill table with columns Cust_No, Cust_Name, Units_Consumed, and Bill_Amt.
+Step 2: We define a PostgreSQL function calculate_bill_amt that calculates the bill amount (Bill_Amt) based on some assumed calculations (DA, PF, Gross Salary, Net Salary). Adjust these calculations according to your actual billing logic.
+Step 3: We write a PostgreSQL block (DO block) to invoke the calculate_bill_amt function for a specific Cust_No and Units_Consumed. This block updates the Bill_Amt in the Elec_Bill table and provides a notice message indicating success.
+Make sure to adjust the calculations (da, pf, gross_salary, net_salary) in the calculate_bill_amt function as per your actual business rules and billing logic. This example assumes a simplified calculation approach for demonstration purposes.
+
+u                                                    uor
+
+
+
+-- Create Elec_Bill table
+CREATE TABLE Elec_Bill (
+    Cust_No CHARACTER(10) PRIMARY KEY,
+    Cust_Name VARCHAR(100),
+    Units_Consumed INTEGER,
+    Bill_Amt NUMERIC(10, 2) -- Default to NULL
+);
+
+-- Create function to calculate Bill_Amt
+CREATE OR REPLACE FUNCTION calculate_bill_amt(cust_no CHARACTER(10), units_consumed INTEGER)
+RETURNS VOID AS $$
+DECLARE
+    da NUMERIC(10, 2);
+    pf NUMERIC(10, 2);
+    gross_salary NUMERIC(10, 2);
+    net_salary NUMERIC(10, 2);
+BEGIN
+    -- Calculate DA (assuming 40% of the base charge, which we will use for simplicity)
+    da := units_consumed * 10.5; -- Assuming DA is calculated as 10.5 per unit consumed
+    
+    -- Calculate PF (assuming 5% of the base charge, which we will use for simplicity)
+    pf := units_consumed * 2.5; -- Assuming PF is calculated as 2.5 per unit consumed
+    
+    -- Calculate Gross Salary
+    gross_salary := units_consumed * 20; -- Assuming a fixed rate of 20 per unit consumed
+    
+    -- Calculate Net Salary
+    net_salary := gross_salary - pf; -- Subtract PF from Gross Salary
+    
+    -- Update Bill_Amt in Elec_Bill table
+    UPDATE Elec_Bill
+    SET Bill_Amt = net_salary
+    WHERE Cust_No = cust_no;
+    
+    -- Optionally, you can return something if needed
+    -- RETURN 'Bill amount updated successfully';
+END;
+$$ LANGUAGE plpgsql;
+
+-- PostgreSQL block to update Bill_Amt by invoking the function
+DO $$
+DECLARE
+    cust_no CHARACTER(10) := 'C001'; -- Replace with the actual Cust_No
+    units_consumed INTEGER := 100; -- Replace with the actual Units_Consumed
+BEGIN
+    PERFORM calculate_bill_amt(cust_no, units_consumed);
+    -- Optionally, you can add additional operations or logic here
+    
+    -- Print a message indicating success
+    RAISE NOTICE 'Bill amount updated successfully for Cust_No: %', cust_no;
+END;
+$$;
+
+
+
+
+
+

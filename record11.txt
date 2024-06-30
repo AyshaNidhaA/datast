@@ -1,0 +1,132 @@
+-- Create product table
+CREATE TABLE product (
+    Product_code SERIAL PRIMARY KEY,
+    Product_Name VARCHAR(255) NOT NULL,
+    Category VARCHAR(100),
+    Quantity INT,
+    Price DECIMAL(10, 2)
+);
+
+-- Insert some sample records
+INSERT INTO product (Product_Name, Category, Quantity, Price)
+VALUES
+('Soap', 'Bath Soap', 200, 25.50),
+('Toothpaste', 'Paste', 150, 30.75),
+('Shampoo', 'Hair Care', 300, 15.99),
+('Detergent', 'Washing Powder', 400, 40.00),
+('Face Wash', 'Skin Care', 120, 18.50),
+('Hand Wash', 'Hygiene', 80, 22.25),
+('Shaving Cream', 'Shaving', 90, 28.99),
+('Sanitizer', 'Hygiene', 250, 12.99),
+('Shower Gel', 'Bath Soap', 350, 27.50),
+('Scrub', 'Skin Care', 30, 35.00);
+
+-- Queries
+
+-- a. Display the records in descending order of Product_Name
+SELECT *
+FROM product
+ORDER BY Product_Name DESC;
+
+-- b. Display Product_Code, Product_Name with price between 20 and 50
+SELECT Product_Code, Product_Name
+FROM product
+WHERE Price BETWEEN 20 AND 50;
+
+-- c. Display the Product_Name and price of categories 'Bath Soap', 'Paste', 'Washing Powder'
+SELECT Product_Name, Price
+FROM product
+WHERE Category IN ('Bath Soap', 'Paste', 'Washing Powder');
+
+-- d. Display the product details whose Quantity is less than 100 or greater than 500
+SELECT *
+FROM product
+WHERE Quantity < 100 OR Quantity > 500;
+
+-- e. Display product names that start with 'S'
+SELECT Product_Name
+FROM product
+WHERE Product_Name LIKE 'S%';
+
+-- f. Display the products which do not belong to the category 'Paste'
+SELECT *
+FROM product
+WHERE Category != 'Paste';
+
+-- g. Display the product names whose second letter is 'a' and belong to the Category 'Washing Powder'
+SELECT Product_Name
+FROM product
+WHERE Category = 'Washing Powder' AND SUBSTRING(Product_Name FROM 2 FOR 1) = 'a';
+                               
+
+                                                             uor
+ 
+Step 1: Create product Table and Insert Records
+sql
+Copy code
+-- Create product table
+CREATE TABLE product (
+    Product_code SERIAL PRIMARY KEY,
+    Product_Name VARCHAR(255) NOT NULL,
+    Category VARCHAR(100),
+    Quantity INT,
+    Price DECIMAL(10, 2)
+);
+
+-- Insert some sample records
+INSERT INTO product (Product_Name, Category, Quantity, Price)
+VALUES
+('Soap', 'Bath Soap', 200, 25.50),
+('Toothpaste', 'Paste', 150, 30.75),
+('Shampoo', 'Hair Care', 300, 15.99),
+('Detergent', 'Washing Powder', 400, 40.00),
+('Face Wash', 'Skin Care', 120, 18.50),
+('Hand Wash', 'Hygiene', 80, 22.25),
+('Shaving Cream', 'Shaving', 90, 28.99),
+('Sanitizer', 'Hygiene', 250, 12.99),
+('Shower Gel', 'Bath Soap', 350, 27.50),
+('Scrub', 'Skin Care', 30, 35.00);
+Queries
+a. Display the records in descending order of Product_Name
+sql
+Copy code
+SELECT *
+FROM product
+ORDER BY Product_Name DESC;
+b. Display Product_Code, Product_Name with price between 20 and 50
+sql
+Copy code
+SELECT Product_Code, Product_Name
+FROM product
+WHERE Price BETWEEN 20 AND 50;
+c. Display the Product_Name and price of categories 'Bath Soap', 'Paste', 'Washing Powder'
+sql
+Copy code
+SELECT Product_Name, Price
+FROM product
+WHERE Category IN ('Bath Soap', 'Paste', 'Washing Powder');
+d. Display the product details whose Quantity is less than 100 or greater than 500
+sql
+Copy code
+SELECT *
+FROM product
+WHERE Quantity < 100 OR Quantity > 500;
+e. Display product names that start with 'S'
+sql
+Copy code
+SELECT Product_Name
+FROM product
+WHERE Product_Name LIKE 'S%';
+f. Display the products which do not belong to the category 'Paste'
+sql
+Copy code
+SELECT *
+FROM product
+WHERE Category != 'Paste';
+g. Display the product names whose second letter is 'a' and belong to the Category 'Washing Powder'
+sql
+Copy code
+SELECT Product_Name
+FROM product
+WHERE Category = 'Washing Powder' AND SUBSTRING(Product_Name FROM 2 FOR 1) = 'a';
+Complete SQL Script

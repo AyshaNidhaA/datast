@@ -1,0 +1,204 @@
+Step 1: Create Database Schema
+Customers Table: Contains information about each customer.
+
+CustomerID (Primary Key)
+CustomerName
+Address
+ContactNumber
+...
+MeterReadings Table: Stores monthly meter readings for each customer.
+
+ReadingID (Primary Key)
+CustomerID (Foreign Key referencing Customers.CustomerID)
+ReadingDate (Date of the meter reading)
+PreviousReading (Previous month's meter reading)
+CurrentReading (Current month's meter reading)
+ElectricityRates Table: Defines the electricity rates applicable for billing.
+
+RateID (Primary Key)
+RateType (e.g., residential, commercial)
+RatePerUnit (Price per unit of electricity consumed)
+FixedCharge (Fixed monthly charge)
+Bills Table: Stores generated bills for customers.
+
+BillID (Primary Key)
+CustomerID (Foreign Key referencing Customers.CustomerID)
+BillDate (Date when the bill is generated)
+Month (Month for which the bill is generated)
+TotalUnitsConsumed (Total units consumed in the month)
+AmountDue (Total amount due based on units consumed and rates)
+Status (Paid/Unpaid)
+Step 2: Populate Tables and Define Rates
+Insert sample data into the Customers, MeterReadings, and ElectricityRates tables to simulate usage:
+
+sql
+Copy code
+-- Customers Table
+CREATE TABLE Customers (
+    CustomerID SERIAL PRIMARY KEY,
+    CustomerName VARCHAR(100) NOT NULL,
+    Address TEXT,
+    ContactNumber VARCHAR(20)
+);
+
+INSERT INTO Customers (CustomerName, Address, ContactNumber)
+VALUES
+('John Doe', '123 Main St, Anytown', '123-456-7890'),
+('Jane Smith', '456 Elm St, Othertown', '987-654-3210');
+
+-- MeterReadings Table
+CREATE TABLE MeterReadings (
+    ReadingID SERIAL PRIMARY KEY,
+    CustomerID INT REFERENCES Customers(CustomerID) ON DELETE CASCADE,
+    ReadingDate DATE NOT NULL,
+    PreviousReading INT NOT NULL,
+    CurrentReading INT NOT NULL
+);
+
+-- Sample meter readings
+INSERT INTO MeterReadings (CustomerID, ReadingDate, PreviousReading, CurrentReading)
+VALUES
+(1, '2024-05-01', 1000, 1100),  -- John Doe's readings for May
+(2, '2024-05-01', 800, 900);    -- Jane Smith's readings for May
+
+-- ElectricityRates Table
+CREATE TABLE ElectricityRates (
+    RateID SERIAL PRIMARY KEY,
+    RateType VARCHAR(50) NOT NULL,
+    RatePerUnit DECIMAL(10, 2) NOT NULL,
+    FixedCharge DECIMAL(10, 2) NOT NULL
+);
+
+-- Sample rates
+INSERT INTO ElectricityRates (RateType, RatePerUnit, FixedCharge)
+VALUES
+('Residential', 10.50, 50.00),
+('Commercial', 12.75, 75.00);
+Step 3: Generate Electricity Bills
+Now, create a stored procedure or use SQL queries to calculate and generate bills for each customer based on their meter readings and the defined rates.
+
+Example SQL Query to Generate Bills
+sql
+Copy code
+-- Generate bills for May 2024
+INSERT INTO Bills (CustomerID, BillDate, Month, TotalUnitsConsumed, AmountDue, Status)
+SELECT
+    m.CustomerID,
+    CURRENT_DATE AS BillDate,
+    '2024-05' AS Month,
+    m.CurrentReading - m.PreviousReading AS TotalUnitsConsumed,
+    (m.CurrentReading - m.PreviousReading) * r.RatePerUnit + r.FixedCharge AS AmountDue,
+    'Unpaid' AS Status
+FROM
+    MeterReadings m
+JOIN
+    ElectricityRates r ON m.CustomerID = r.CustomerID
+WHERE
+    m.ReadingDate = '2024-05-01';
+Step 4: View Bills
+Create a view to easily view the bills generated:
+
+sql
+Copy code
+CREATE VIEW ElectricityBills AS
+SELECT
+    b.BillID,
+    c.CustomerName,
+    c.Address,
+    b.Month,
+    b.TotalUnitsConsumed,
+    b.AmountDue,
+    b.Status
+FROM
+    Bills b
+JOIN
+    Customers c ON b.CustomerID = c.CustomerID;
+Additional Features
+Bill Payment Tracking: Extend the Bills table to include payment information.
+Bill History: Maintain a history of bills generated each month for historical tracking.
+Notifications: Implement notifications for customers when bills are generated or due.
+Reports: Develop reports for billing summaries, overdue bills, etc., using SQL queries and possibly reporting tools.
+By following these steps and extending the schema and queries as needed, you can create a robust Electricity Bill Report generating system to manage billing for customers effectively.
+
+
+
+
+
+                                                                uor
+
+
+-- Customers Table
+CREATE TABLE Customers (
+    CustomerID SERIAL PRIMARY KEY,
+    CustomerName VARCHAR(100) NOT NULL,
+    Address TEXT,
+    ContactNumber VARCHAR(20)
+);
+
+INSERT INTO Customers (CustomerName, Address, ContactNumber)
+VALUES
+('John Doe', '123 Main St, Anytown', '123-456-7890'),
+('Jane Smith', '456 Elm St, Othertown', '987-654-3210');
+
+-- MeterReadings Table
+CREATE TABLE MeterReadings (
+    ReadingID SERIAL PRIMARY KEY,
+    CustomerID INT REFERENCES Customers(CustomerID) ON DELETE CASCADE,
+    ReadingDate DATE NOT NULL,
+    PreviousReading INT NOT NULL,
+    CurrentReading INT NOT NULL
+);
+
+-- Sample meter readings
+INSERT INTO MeterReadings (CustomerID, ReadingDate, PreviousReading, CurrentReading)
+VALUES
+(1, '2024-05-01', 1000, 1100),  -- John Doe's readings for May
+(2, '2024-05-01', 800, 900);    -- Jane Smith's readings for May
+
+-- ElectricityRates Table
+CREATE TABLE ElectricityRates (
+    RateID SERIAL PRIMARY KEY,
+    RateType VARCHAR(50) NOT NULL,
+    RatePerUnit DECIMAL(10, 2) NOT NULL,
+    FixedCharge DECIMAL(10, 2) NOT NULL
+);
+
+-- Sample rates
+INSERT INTO ElectricityRates (RateType, RatePerUnit, FixedCharge)
+VALUES
+('Residential', 10.50, 50.00),
+('Commercial', 12.75, 75.00);
+
+
+
+-- Generate bills for May 2024
+INSERT INTO Bills (CustomerID, BillDate, Month, TotalUnitsConsumed, AmountDue, Status)
+SELECT
+    m.CustomerID,
+    CURRENT_DATE AS BillDate,
+    '2024-05' AS Month,
+    m.CurrentReading - m.PreviousReading AS TotalUnitsConsumed,
+    (m.CurrentReading - m.PreviousReading) * r.RatePerUnit + r.FixedCharge AS AmountDue,
+    'Unpaid' AS Status
+FROM
+    MeterReadings m
+JOIN
+    ElectricityRates r ON m.CustomerID = r.CustomerID
+WHERE
+    m.ReadingDate = '2024-05-01';
+
+
+
+CREATE VIEW ElectricityBills AS
+SELECT
+    b.BillID,
+    c.CustomerName,
+    c.Address,
+    b.Month,
+    b.TotalUnitsConsumed,
+    b.AmountDue,
+    b.Status
+FROM
+    Bills b
+JOIN
+    Customers c ON b.CustomerID = c.CustomerID;

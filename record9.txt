@@ -1,0 +1,61 @@
+-- Create the tables and insert initial data as provided earlier
+
+-- Add Price column to Books table and update prices
+ALTER TABLE Books ADD COLUMN Price NUMERIC(10, 2);
+
+UPDATE Books
+SET Price = CASE
+    WHEN Title = 'To Kill a Mockingbird' THEN 10.99
+    WHEN Title = '1984' THEN 8.99
+    WHEN Title = 'Moby Dick' THEN 12.99
+    WHEN Title = 'The Great Gatsby' THEN 9.99
+    WHEN Title = 'War and Peace' THEN 15.99
+    WHEN Title = 'Pride and Prejudice' THEN 11.99
+    WHEN Title = 'The Catcher in the Rye' THEN 10.49
+    WHEN Title = 'The Lord of the Rings' THEN 20.99
+    WHEN Title = 'Animal Farm' THEN 7.99
+    WHEN Title = 'The Hobbit' THEN 14.99
+END;
+
+-- Create the view for currently issued books
+CREATE VIEW CurrentlyIssuedBooks AS
+SELECT b.Title AS BookName, m.MemberName, l.LoanDate AS IssueDate
+FROM Loans l
+JOIN Books b ON l.BookID = b.BookID
+JOIN Members m ON l.MemberID = m.MemberID
+WHERE l.ReturnDate IS NULL;
+
+-- a. List the records of members who have not been issued any book using EXISTS operator
+SELECT m.MemberID, m.MemberName
+FROM Members m
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Loans l
+    WHERE l.MemberID = m.MemberID
+);
+
+-- b. List the members who have got issued at least one book (use IN / ANY operator)
+-- Using IN operator
+SELECT m.MemberID, m.MemberName
+FROM Members m
+WHERE m.MemberID IN (
+    SELECT l.MemberID
+    FROM Loans l
+);
+
+-- Using ANY operator
+SELECT m.MemberID, m.MemberName
+FROM Members m
+WHERE m.MemberID = ANY (
+    SELECT l.MemberID
+    FROM Loans l
+);
+
+-- c. List the books which have the maximum Price using ALL operator
+SELECT Title, Price
+FROM Books
+WHERE Price >= ALL (SELECT Price FROM Books);
+
+-- d. Display Book Name, Member Name, and Issue date of Book. Create a view of this query of the currently issued books
+SELECT *
+FROM CurrentlyIssuedBooks;

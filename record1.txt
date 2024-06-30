@@ -1,0 +1,67 @@
+ SQL> create table emplyee (empid int primary key, ename varchar(10), salary decimal(10,2), department varchar(15),age int);
+
+Table created.
+
+SQL>  INSERT INTO emplyee values(1,'A',60000,'sales',45);
+
+1 row created.
+
+SQL>  INSERT INTO emplyee values(2,'B',75000,'mareting',38);
+
+1 row created.
+
+SQL>  INSERT INTO emplyee values(3,'C',8000,'it',50);
+
+1 row created.
+
+SQL>  INSERT INTO emplyee values(4,'D',10000,'sales',49);
+
+1 row created.
+
+SQL>  INSERT INTO emplyee values(5,'C',975000,'IT',55);
+
+1 row created.
+
+SQL>  select count(*)"total empleee"from emplyee;
+
+total empleee
+-------------
+            5
+
+
+
+SQL>  select department,MAX(age) from emplyee group by department;
+
+DEPARTMENT        MAX(AGE)
+--------------- ----------
+sales                   49
+mareting                38
+it                      50
+IT                      55
+
+SQL> select department,AVG(salary) from emplyee group by department;
+
+DEPARTMENT      AVG(SALARY)
+--------------- -----------
+sales                 35000
+mareting              75000
+it                     8000
+IT                   975000
+
+SQL>  select department,MIN(salary) from emplyee group by department;
+
+DEPARTMENT      MIN(SALARY)
+--------------- -----------
+sales                 10000
+mareting              75000
+it                     8000
+IT                   975000
+
+SQL> select department,MAX(salary) from emplyee group by department;
+
+DEPARTMENT      MAX(SALARY)
+--------------- -----------
+sales                 60000
+mareting              75000
+it                     8000
+IT                   975000
